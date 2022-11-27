@@ -50,11 +50,12 @@ Open http://localhost:8080/docs on a browser
 Example:
 ```bash
 curl -X 'GET' \                                                                                                                                (docker-desktop/default)
-  'http://0.0.0.0:8080/company/uk/1111' \
+  'http://0.0.0.0:8080/v1/company/uk/1111' \
   -H 'accept: application/json'
 ```
 
 ## TODO and known issues
+- In the [API test](tests/openapi_server/apis/test_company_api.py) is perform as an integration test, the calls to the server should be mocked.
 - Validations are weak, for instance, the names, they can have multiple spaces between name, middle name and last name.
 - Some validations are hardcoded just to satisfy the requirements of this exercise, however, it does not scale.
 - Code formatting/Auto formatting.
