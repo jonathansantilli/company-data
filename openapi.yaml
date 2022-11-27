@@ -1,0 +1,256 @@
+openapi: 3.0.3
+info:
+  description: Service to get information about companies across different jurisdictions
+  license:
+    name: Apache-2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0.html
+  title: OpenAPI Company data
+  version: 1.0.0
+servers:
+- description: Company data API
+  url: /v1
+tags:
+- description: The company information
+  name: company
+paths:
+  /v1/company/{jurisdiction_code}/{company_number}:
+    get:
+      description: Get multiple information related to a company from a particular
+        jurisdiction
+      operationId: getCompanyData
+      parameters:
+      - description: The jurisdiction identifier
+        example: uk
+        explode: false
+        in: path
+        name: jurisdiction_code
+        required: true
+        schema:
+          enum:
+          - uk
+          - de
+          - nl
+          type: string
+        style: simple
+      - description: The company identifier
+        example: 1111
+        explode: false
+        in: path
+        name: company_number
+        required: true
+        schema:
+          enum:
+          - 1111
+          - 2222
+          - 3333
+          - 4444
+          - 5555
+          - 6666
+          format: int64
+          type: integer
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Company'
+          description: Successful Response
+        "400":
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: "Bad request, Invalid jurisdiction or company identifier"
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Validation Error
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Internal Server Error
+      summary: Get company data by jurisdiction
+      tags:
+      - company
+components:
+  schemas:
+    Company:
+      example:
+        date_dissolved:
+          month: 6
+          year: 0
+          day: 1
+        company_type: 'Ltd'
+        official_address:
+          country: country
+          city: city
+          street: street
+          postcode: postcode
+        company_number: company_number
+        date_established:
+          month: 6
+          year: 0
+          day: 1
+        company_name: company_name
+        jurisdiction_code: jurisdiction_code
+        status: 'Active'
+        officers:
+        - role: role
+          date_of_birth:
+            month: 5
+            year: 5
+          full_name: full_name
+          date_to:
+            month: 6
+            year: 0
+            day: 1
+          date_from:
+            month: 6
+            year: 0
+            day: 1
+        - role: role
+          full_name: full_name
+          date_of_birth:
+            month: 5
+            year: 5
+          date_to:
+            month: 6
+            year: 0
+            day: 1
+          date_from:
+            month: 6
+            year: 0
+            day: 1
+      properties:
+        company_number:
+          title: Company Number
+          type: string
+        company_name:
+          title: Company Name
+          type: string
+        jurisdiction_code:
+          title: Jurisdiction Code
+          type: string
+        company_type:
+          title: Company Type
+          type: string
+        status:
+          title: Status
+          type: string
+        date_established:
+          $ref: '#/components/schemas/FullDate'
+        date_dissolved:
+          $ref: '#/components/schemas/FullDate'
+        official_address:
+          $ref: '#/components/schemas/OfficialAddress'
+        officers:
+          items:
+            $ref: '#/components/schemas/Officer'
+          title: Officers
+          type: array
+      title: Company
+      type: object
+    FullDate:
+      example:
+        month: 6
+        year: 0
+        day: 1
+      properties:
+        year:
+          title: Year
+          type: integer
+        month:
+          title: Month
+          type: integer
+        day:
+          title: Day
+          type: integer
+      title: FullDate
+      type: object
+    Officer:
+      example:
+        role: 'Runner'
+        full_name: 'Flash Gordon'
+        date_of_birth:
+          month: 5
+          year: 5
+        date_to:
+          month: 6
+          year: 0
+          day: 1
+        date_from:
+          month: 6
+          year: 0
+          day: 1
+      properties:
+        full_name:
+          title: Full name
+          type: string
+        date_from:
+          $ref: '#/components/schemas/FullDate'
+        date_to:
+          $ref: '#/components/schemas/FullDate'
+        role:
+          title: Role
+          type: string
+        date_of_birth:
+          $ref: '#/components/schemas/PartialDate'
+      title: Officer
+      type: object
+    OfficialAddress:
+      example:
+        country: country
+        city: city
+        street: street
+        postcode: postcode
+      properties:
+        street:
+          title: Street
+          type: string
+        city:
+          title: City
+          type: string
+        country:
+          title: Country
+          type: string
+        postcode:
+          title: Postcode
+          type: string
+      title: OfficialAddress
+      type: object
+    PartialDate:
+      example:
+        month: 5
+        year: 5
+      properties:
+        year:
+          title: Year
+          type: integer
+        month:
+          title: Month
+          type: integer
+      title: PartialDate
+      type: object
+    Error:
+      additionalProperties: false
+      example:
+        detail: Not Found
+        status: "404"
+      properties:
+        detail:
+          description: An explanation of the problem.
+          example: "The request was missing these required fields: ..."
+          type: string
+        status:
+          description: "The HTTP status code applicable to this problem, expressed\
+            \ as a string value."
+          example: "400"
+          pattern: "^[45]\\d\\d$"
+          type: string
+      title: Error
+      type: object
