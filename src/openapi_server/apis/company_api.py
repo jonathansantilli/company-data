@@ -35,6 +35,7 @@ async def get_company_data(
     if error:
         raise HTTPException(detail=error.detail, status_code=int(error.status))
 
+    # TODO: These API calls should be perform in parallel
     company_from_third_party_a = await third_party_a.get_company_data(
         jurisdiction_code, company_number
     )

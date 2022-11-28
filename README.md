@@ -57,6 +57,7 @@ curl -X 'GET' \                                                                 
 
 ## TODO and known issues
 - In the [API test](tests/openapi_server/apis/test_company_api.py) is perform as an integration test, the calls to the server should be mocked.
+- The API calls to the sources should be done in parallel.
 - Validations are weak, for instance, the names, they can have multiple spaces between name, middle name and last name.
 - Some validations are hardcoded just to satisfy the requirements of this exercise, however, it does not scale.
 - Code formatting/Auto formatting.
