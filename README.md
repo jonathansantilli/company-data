@@ -31,12 +31,12 @@ then and open your browser at `http://localhost:8080/docs/` to see the docs.
 
 To run the tests locally:
 
-In Docker (Recommended):
+### In Docker (Recommended):
 ```bash
 docker-compose up --build test_runner
 ```
 
-In localhost
+### In localhost
 ```bash
 pip3 install pytest
 PYTHONPATH=src pytest tests
